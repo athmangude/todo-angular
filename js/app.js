@@ -1,39 +1,31 @@
 // Instantiate Angular
 var TodoApp = angular.module('TodoApp',[]);
 
-TodoApp.controller('TodoController', ['$scope', TodoController]);
-TodoApp.controller('TodoAppController', ['$scope', '$rootScope', TodoAppController]);
+TodoApp.controller('TodoAppController', ['$scope', '$rootScope', 'todoListings', TodoAppController]);
+TodoApp.controller('TodoController', ['$scope', 'todoListings', TodoController]);
+//TodoApp.controller('listing', ['$scope', TodoController]);
 
-function TodoAppController($scope, $rootscope){
+function TodoAppController($scope, $rootscope, todoListings){
 	$scope.appTitle = "Todo List";
+	//$scope.newTask = undefined;
 	$scope.addTask = function(form){
 		console.log("Form", $scope.newTask);
-		$rootscope.$broadcast('newTaskAdded', $scope.newTask);
+		//$rootscope.$broadcast('newTaskAdded', $scope.newTask);
+		todoListings.add($scope.newTask)
+		$scope.newTask = undefined;
 	}
 }
 
-function TodoController($scope){
-	$scope.todoList = [
-		{ isDone: true, task: "Learn Angular"},
-		{ isDone: true, task: "Put it in Meteor"},
-		{ isDone: false, task: "Cause a meteor shower"},
-		{ isDone: false, task: "Prepare Spaceship"},
-		{ isDone: false, task: "Fire it Up"},
-		{ isDone: false, task: "Fly to the edge of the Galaxy"}
-	];
+function TodoController($scope, todoListings){
+	$scope.todoList = todoListings.get();
 
 	$scope.setTask = function(isDone, $index){
 		//console.log("Task is ", isDone);
 		var done = isDone == true ? false : true;
-		$scope.todoList[$index].isDone = done;
+		todoListings.isDone = done;
 	}
 	
-	$scope.$on('newTaskAdded', function(eventEmitted, newTask){
-		console.log("New task added", newTask);
-		var task = Object.create({
-			task: newTask,
-			isDone: false
-		});
-		$scope.todoList.push(task);
-	});
+	$scope.deleteTask = function($index){
+		
+	}
 }
