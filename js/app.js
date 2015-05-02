@@ -17,4 +17,10 @@ function TodoController($scope){
 		{ isDone: false, task: "Fire it Up"},
 		{ isDone: false, task: "Fly to the edge of the Galaxy"}
 	];
+
+	$scope.setTask = function(isDone, $index){
+		//console.log("Task is ", isDone);
+		var done = isDone == true ? false : true;
+		$scope.todoList[$index].isDone = done;
+	}
 }
